@@ -1,3 +1,20 @@
-<p>
-  box-form works!
-</p>
+<div class="row">
+  <div class="col-sm-8 col-sm-offset-2">
+    <h2>Enregistrer un nouveau Box</h2>
+    <form [formGroup]="boxForm" (ngSubmit)="onSaveBox()">
+      <div class="form-group">
+        <label for="nom">Nom du box</label>
+        <input type="text" id="nom" class="form-control" formControlName="nom">
+      </div>
+      <div class="form-group">
+          <label for="adresse">Adresse du box</label>
+          <input type="text" id="adresse" class="form-control" formControlName="adresse">
+      </div>
+      <div class="form-group">
+          <label for="etat">Etat du box</label>
+          <input type="text" id="etat" class="form-control" formControlName="etat">
+      </div>
+      <button class ="btn btn-success" [disabled]="boxForm.invalid" type="submit">Enregistrer</button>
+    </form>
+  </div>
+</div>

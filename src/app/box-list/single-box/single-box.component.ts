@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Box } from '../../models/box.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BoxsService } from '../../services/boxs.service';
 
 @Component({
   selector: 'app-single-box',
@@ -7,9 +10,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SingleBoxComponent implements OnInit {
 
-  constructor() { }
+  box: Box;
+
+  constructor(private route: ActivatedRoute, private boxsService: BoxsService, private router: Router) { }
 
   ngOnInit() {
+    this.box = new Box('', '');
+    /* tslint:disable:no-string-literal */
+    const id = this.route.snapshot.params['id'];
+    /* tslint:enable:no-string-literal */
+    this.boxsService.getSingleBox(+id).then(
+      (box: Box) => {
+        this.box = box;
+      }
+    );
+  }
+
+  onBack() {
+    this.router.navigate(['/boxs']);
   }
 
 }
