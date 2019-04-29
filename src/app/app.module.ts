@@ -18,9 +18,11 @@ import { AuthGuardService } from './services/auth-guard.service';
 const appRoutes: Routes = [
   { path: 'auth/signup', component: SignupComponent },
   { path: 'auth/signin', component: SigninComponent },
-  { path: 'boxs', component: BoxListComponent },
-  { path: 'boxs/new', component: BoxFormComponent },
-  { path: 'boxs/view/:id', component: SingleBoxComponent}
+  { path: 'boxs', canActivate: [AuthGuardService], component: BoxListComponent },
+  { path: 'boxs/new', canActivate: [AuthGuardService], component: BoxFormComponent },
+  { path: 'boxs/view/:id', canActivate: [AuthGuardService], component: SingleBoxComponent},
+  { path: '', redirectTo: 'boxs', pathMatch: 'full'},
+  { path: '**', redirectTo: 'boxs' }
 ];
 @NgModule({
   declarations: [
