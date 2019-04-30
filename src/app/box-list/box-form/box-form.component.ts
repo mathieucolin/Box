@@ -23,6 +23,8 @@ export class BoxFormComponent implements OnInit {
     this.boxForm = this.formBuilder.group({
       nom: ['', Validators.required],
       adresse: ['', Validators.required],
+      ville: ['', Validators.required],
+      codePostal: ['', [Validators.required, Validators.pattern(/[0-9]{5,}/)]],
       etat: ''
     });
   }
@@ -30,9 +32,13 @@ export class BoxFormComponent implements OnInit {
   onSaveBox() {
     const nom = this.boxForm.get('nom').value;
     const adresse = this.boxForm.get('adresse').value;
+    const ville = this.boxForm.get('ville').value;
+    const codePostal = this.boxForm.get('codePostal').value;
     const etat = this.boxForm.get('etat').value;
     const newBox = new Box(nom, adresse);
     newBox.etat = etat;
+    newBox.ville = ville;
+    newBox.codePostal = codePostal;
     this.boxsService.createNewBox(newBox);
     this.router.navigate(['/boxs']);
   }
