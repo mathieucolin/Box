@@ -11,8 +11,19 @@
           <input type="text" id="adresse" class="form-control" formControlName="adresse">
       </div>
       <div class="form-group">
+        <label for="ville"> Ville </label>
+        <input type="text" id="ville" class="form-control" >
+      <div class="form-group">
+          <label for="codePostal"> Code Postal </label>
+          <input type="text" id="codePostal" class="form-control">
+      </div>
+      </div>
+      <div class="form-group">
           <label for="etat">Etat du box</label>
-          <input type="text" id="etat" class="form-control" formControlName="etat">
+          <select type="text" id="etat" class="form-control" formControlName="etat">
+            <option value="Allumé">Allumé</option>
+            <option value="Eteint">Eteint</option>
+          </select>
       </div>
       <button class ="btn btn-success" [disabled]="boxForm.invalid" type="submit">Enregistrer</button>
     </form>

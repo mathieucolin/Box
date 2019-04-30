@@ -58,7 +58,7 @@ export class BoxsService {
         }
       }
     );
-    this.boxs.slice(BoxIndexToRemove, 1);
+    this.boxs.splice(BoxIndexToRemove, 1);
     this.saveBoxs();
     this.emitBoxs();
   }
