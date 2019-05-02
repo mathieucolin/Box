@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 export class BoxFormComponent implements OnInit {
 
   boxForm: FormGroup;
+  submitted = false;
 
   constructor(private formBuilder: FormBuilder, private boxsService: BoxsService, private router: Router) { }
 
@@ -24,21 +25,30 @@ export class BoxFormComponent implements OnInit {
       nom: ['', Validators.required],
       adresse: ['', Validators.required],
       ville: ['', Validators.required],
-      codePostal: ['', [Validators.required, Validators.pattern(/[0-9]{5,}/)]],
-      etat: ''
+      codePostal: ['', [Validators.required, Validators.pattern(/^(?:[0-8]\d|9[0-8])\d{3}$/)]],
+      etat: ['', Validators.required],
+      taille: ['', Validators.required]
     });
   }
 
+  get f() { return this.boxForm.controls ; }
+
   onSaveBox() {
+
+    this.submitted = true;
+
+    if (this.boxForm.invalid) {
+      return;
+    }
+
     const nom = this.boxForm.get('nom').value;
     const adresse = this.boxForm.get('adresse').value;
     const ville = this.boxForm.get('ville').value;
     const codePostal = this.boxForm.get('codePostal').value;
     const etat = this.boxForm.get('etat').value;
-    const newBox = new Box(nom, adresse);
-    newBox.etat = etat;
-    newBox.ville = ville;
-    newBox.codePostal = codePostal;
+    const taille = this.boxForm.get('taille').value;
+    const newBox = new Box(nom, adresse, ville, codePostal, etat, taille);
+
     this.boxsService.createNewBox(newBox);
     this.router.navigate(['/boxs']);
   }

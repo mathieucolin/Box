@@ -4,13 +4,20 @@
       <form [formGroup] = "signInForm" (ngSubmit) = "onSubmit()">
         <div class="form-group">
           <label for = "email">Adresse mail</label>
-          <input type="text" id ="email" class="form-control" formControlName="email">
+          <input type="text" id ="email" class="form-control" formControlName="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
+          <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+              <div class="text text-danger" *ngIf="f.email.errors.required">Ce champs est requis</div>
+              <div class="text text-danger" *ngIf="f.email.errors.email">Entrez une adresse mail valide</div>
+          </div>
         </div>
         <div class="form-group">
-          <label for = "password">Mot de passe</label>
-          <input type="password" id="password" class="form-control" formControlName="password">
+            <label for = "password">Mot de passe</label>
+            <input type="password" id="password" class="form-control" formControlName="password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
+            <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                <div class="text text-danger" *ngIf="f.password.errors.required">Ce champs est requis</div>
+              </div>
         </div>
-        <button class="btn btn-primary" type="submit" [disabled]="signInForm.invalid">Connexion</button>
+        <button class="btn btn-primary" type="submit">Connexion</button>
       </form>
       <p class="text-danger">{{ errorMessage }}</p>
     </div>

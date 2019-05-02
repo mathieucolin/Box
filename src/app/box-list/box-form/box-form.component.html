@@ -4,32 +4,51 @@
     <form [formGroup]="boxForm" (ngSubmit)="onSaveBox()">
       <div class="form-group">
         <label for="nom">Nom du box</label>
-        <input type="text" id="nom" class="form-control" formControlName="nom">
+        <input type="text" id="nom" class="form-control" formControlName="nom" [ngClass]="{ 'is-invalid': submitted && f.nom.errors }"/>
+        <div *ngIf="submitted && f.nom.errors" class="invalid-feedback">
+          <div class="text text-danger" *ngIf="f.nom.errors.required">Ce champs est requis</div>
+        </div>
       </div>
       <div class="form-group">
           <label for="adresse">Adresse du box</label>
-          <input type="text" id="adresse" class="form-control" formControlName="adresse">
+          <input type="text" id="adresse" class="form-control" formControlName="adresse" [ngClass]="{ 'is-invalid': submitted && f.adresse.errors }"/>
+          <div *ngIf="submitted && f.adresse.errors" class="invalid-feedback">
+              <div class="text text-danger" *ngIf="f.adresse.errors.required">Ce champs est requis</div>
+          </div>
       </div>
       <div class="form-group">
         <label for="ville"> Ville </label>
-        <input type="text" id="ville" class="form-control" formControlName="ville">
+        <input type="text" id="ville" class="form-control" formControlName="ville" [ngClass]="{ 'is-invalid': submitted && f.ville.errors }"/>
+        <div *ngIf="submitted && f.ville.errors" class="invalid-feedback">
+            <div class="text text-danger" *ngIf="f.adresse.errors.required">Ce champs est requis</div>
+        </div>
       </div>
-      <div class="form-group" *ngIf="boxForm.invalid === false">
+      <div class="form-group">
           <label for="codePostal"> Code Postal </label>
-          <input type="text" id="codePostal" class="form-control" formControlName="codePostal">
-      </div>
-      <div class="form-group has-success has-feedback" *ngIf="boxForm.invalid === false">
-          <label for="codePostal"> Code Postal </label>
-          <input type="text" id="codePostal" class="form-control" formControlName="codePostal">
+          <input type="text" id="codePostal" class="form-control" formControlName="codePostal" [ngClass]="{ 'is-invalid': submitted && f.codePostal.errors }">
+          <div *ngIf="submitted && f.codePostal.errors" class="invalid-feedback">
+              <div class="text text-danger" *ngIf="f.codePostal.errors.required">Ce champs est requis</div>
+              <div class="text text-danger" *ngIf="f.codePostal.errors.pattern">Entrez un code postal valide</div>
+          </div>
       </div>
       <div class="form-group">
           <label for="etat">Etat du box</label>
-          <select type="text" id="etat" class="form-control" formControlName="etat">
+          <select type="text" id="etat" class="form-control" formControlName="etat" [ngClass]="{ 'is-invalid': submitted && f.etat.errors }">
             <option value="Ouvert">Ouvert</option>
             <option value="Fermé">Fermé</option>
           </select>
+          <div *ngIf="submitted && f.etat.errors" class="invalid-feedback">
+              <div class="text text-danger" *ngIf="f.etat.errors.required">Ce champs est requis</div>
+          </div>
       </div>
-      <button class ="btn btn-success" [disabled]="boxForm.invalid" type="submit">Enregistrer</button>
+      <div class="form-group">
+          <label for="taille">Taille du box</label>
+          <input type="number" id="taille" class="form-control" formControlName="taille" [ngClass]="{ 'is-invalid': submitted && f.taille.errors }">
+          <div *ngIf="submitted && f.taille.errors" class="invalid-feedback">
+              <div class="text text-danger" *ngIf="f.taille.errors.required">Ce champs est requis</div>
+          </div>
+      </div>
+      <button class ="btn btn-success" type="submit">Enregistrer</button>
     </form>
   </div>
 </div>

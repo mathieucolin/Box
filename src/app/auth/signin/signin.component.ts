@@ -12,12 +12,15 @@ export class SigninComponent implements OnInit {
 
   signInForm: FormGroup;
   errorMessage: string;
+  submitted = false;
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.initForm();
   }
+
+  get f() { return this.signInForm.controls; }
 
   initForm() {
     this.signInForm = this.formBuilder.group({
@@ -27,6 +30,12 @@ export class SigninComponent implements OnInit {
   }
 
   onSubmit() {
+    this.submitted = true;
+
+    if (this.signInForm.invalid) {
+      return;
+    }
+
     const email = this.signInForm.get('email').value;
     const password = this.signInForm.get('password').value;
 
