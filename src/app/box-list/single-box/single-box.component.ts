@@ -15,7 +15,7 @@ export class SingleBoxComponent implements OnInit {
   constructor(private route: ActivatedRoute, private boxsService: BoxsService, private router: Router) { }
 
   ngOnInit() {
-    this.box = new Box('', '');
+    this.box = new Box('', '', '', '', '', null);
     /* tslint:disable:no-string-literal */
     const id = this.route.snapshot.params['id'];
     /* tslint:enable:no-string-literal */

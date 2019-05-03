@@ -5,8 +5,11 @@
       <button class="list-group-item" *ngFor="let box of boxs; let i = index" (click)="onViewBox(i)">
         <h3 class="list-group-item-heading">
           {{ box.nom }}
+          <button *ngIf="box.etat === 'Ouvert'" class="btn btn-danger pull-right" (click)="onSwitch(i)">Ouvert</button>
+          <button *ngIf="box.etat === 'Fermé'" class="btn btn-success pull-right" (click)="onSwitch(i)">Fermé</button>
+
           <button class="btn btn-default pull-right" (click)="onDeleteBox(box)">
-            <span class="glyphicon glyphicon-minus"></span>
+            <span class="glyphicon glyphicon-trash"></span>
           </button>
         </h3>
         <p class="list-group-item-text">{{ box.adresse }}</p>

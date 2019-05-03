@@ -30,13 +30,24 @@ export class BoxListComponent implements OnInit, OnDestroy {
   }
 
   onDeleteBox(box: Box) {
-    this.boxsService.removeBox(box);
+    if (confirm('Etes vous sûr de supprimer ce Box ?')) {
+      this.boxsService.removeBox(box);
+    } else {
+      return null;
+    }
   }
 
   onViewBox(id: number) {
     this.router.navigate(['/boxs', 'view', id]);
   }
 
+  onSwitch(id: number) {
+    if (this.boxs[id].etat === 'Ouvert') {
+      this.boxsService.switchoffOne(id);
+    } else if (this.boxs[id].etat === 'Fermé') {
+      this.boxsService.swicthOnOne(id);
+    }
+  }
   ngOnDestroy() {
     this.boxSubscription.unsubscribe();
   }

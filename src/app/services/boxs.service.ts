@@ -62,4 +62,16 @@ export class BoxsService {
     this.saveBoxs();
     this.emitBoxs();
   }
+
+  swicthOnOne(id: number) {
+    this.boxs[id].etat = 'Ouvert';
+    this.saveBoxs();
+    this.emitBoxs();
+  }
+
+  switchoffOne(id: number) {
+    this.boxs[id].etat = 'Fermé';
+    this.saveBoxs();
+    this.emitBoxs();
+  }
 }
