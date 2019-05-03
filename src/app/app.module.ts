@@ -14,6 +14,8 @@ import { HeaderComponent } from './header/header.component';
 import { AuthService } from './services/auth.service';
 import { BoxsService } from './services/boxs.service';
 import { AuthGuardService } from './services/auth-guard.service';
+import { MatButtonModule, MatSnackBarModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const appRoutes: Routes = [
   { path: 'auth/signup', component: SignupComponent },
@@ -39,6 +41,9 @@ const appRoutes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    MatSnackBarModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
     RouterModule.forRoot(appRoutes)
   ],
   providers: [AuthService, BoxsService, AuthGuardService],
