@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { SnackbarService } from '../../services/snackbar.service';
 import { Router } from '@angular/router';
 import { MustMatch } from '../../validators/match.validator';
 
@@ -15,7 +16,8 @@ export class SignupComponent implements OnInit {
   errorMessage: string;
   submitted = false;
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) { }
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router,
+              private snackbarService: SnackbarService) { }
 
   ngOnInit() {
     this.initForm();
@@ -45,6 +47,7 @@ export class SignupComponent implements OnInit {
     this.authService.createNewUser(email, password).then(
       () => {
         this.router.navigate(['/boxs']);
+        this.snackbarService.open('Votre compte ' + email + ' a été créé', 'OK');
       },
       (error) => {
         this.errorMessage = error;

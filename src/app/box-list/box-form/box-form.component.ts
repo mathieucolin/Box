@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Box } from '../../models/box.model';
 import { BoxsService } from '../../services/boxs.service';
-import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
 import { SnackbarService } from '../../services/snackbar.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-box-form',
@@ -16,14 +15,13 @@ export class BoxFormComponent implements OnInit {
   boxForm: FormGroup;
   submitted = false;
 
+
   constructor(private formBuilder: FormBuilder, private boxsService: BoxsService, private router: Router,
               private snackBarService: SnackbarService) { }
 
   ngOnInit() {
     this.initForm();
   }
-
-
 
   initForm() {
     this.boxForm = this.formBuilder.group({
@@ -45,8 +43,7 @@ export class BoxFormComponent implements OnInit {
     if (this.boxForm.invalid) {
       return;
     }
-
-    this.snackBarService.error('Votre box a bien été créé');
+    this.snackBarService.open('Création du box réussie', 'OK');
 
     const nom = this.boxForm.get('nom').value;
     const adresse = this.boxForm.get('adresse').value;

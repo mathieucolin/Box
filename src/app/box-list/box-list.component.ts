@@ -3,6 +3,7 @@ import { BoxsService } from '../services/boxs.service';
 import { Box } from '../models/box.model';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { SnackbarService } from '../services/snackbar.service';
 
 @Component({
   selector: 'app-box-list',
@@ -14,7 +15,7 @@ export class BoxListComponent implements OnInit, OnDestroy {
   boxs: Box[];
   boxSubscription: Subscription;
 
-  constructor(private boxsService: BoxsService, private router: Router) { }
+  constructor(private boxsService: BoxsService, private router: Router, private snackbarService: SnackbarService) { }
 
   ngOnInit() {
     this.boxSubscription = this.boxsService.boxsSubject.subscribe(
@@ -32,6 +33,7 @@ export class BoxListComponent implements OnInit, OnDestroy {
   onDeleteBox(box: Box) {
     if (confirm('Etes vous sûr de supprimer ce Box ?')) {
       this.boxsService.removeBox(box);
+      this.snackbarService.open(box.nom + ' supprimé', 'OK');
     } else {
       return null;
     }

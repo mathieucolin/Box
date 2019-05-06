@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { SnackbarService } from '../../services/snackbar.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,7 +15,8 @@ export class SigninComponent implements OnInit {
   errorMessage: string;
   submitted = false;
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) { }
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router,
+              private snackbarService: SnackbarService) { }
 
   ngOnInit() {
     this.initForm();
@@ -42,6 +44,7 @@ export class SigninComponent implements OnInit {
     this.authService.signInUser(email, password).then(
       () => {
         this.router.navigate(['/boxs']);
+        this.snackbarService.open('Connecté', 'OK');
       },
       (error) => {
         this.errorMessage = error;
