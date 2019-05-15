@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Box } from '../models/box.model';
 import { Subject } from 'rxjs';
 import * as firebase from 'firebase';
+import { AngularFireAuth } from '@angular/fire/auth';
+
 import Datasnapshot = firebase.database.DataSnapshot;
 
 
@@ -10,8 +12,17 @@ export class BoxsService {
   boxs: Box[] = [];
   boxsSubject = new Subject<any[]>();
 
-  constructor() {
-    this.getBoxs();
+  userId: string;
+
+  constructor(private afAuth: AngularFireAuth) {
+    this.afAuth.authState.subscribe(user => {
+      if (user) {
+        this.userId = user.uid;
+        this.getBoxs();
+
+        console.log('Id de l utilisateur : ' + this.userId);
+      }
+     });
   }
 
   emitBoxs() {
@@ -19,11 +30,11 @@ export class BoxsService {
   }
 
   saveBoxs() {
-    firebase.database().ref('/boxs').set(this.boxs);
+    firebase.database().ref('/boxs/' + this.userId).set(this.boxs);
   }
 
   getBoxs() {
-    firebase.database().ref('/boxs').on('value', (data: Datasnapshot) => {
+    firebase.database().ref('/boxs/' + this.userId).on('value', (data: Datasnapshot) => {
       this.boxs = data.val() ? data.val() : [];
       this.emitBoxs();
     }
@@ -33,7 +44,7 @@ export class BoxsService {
   getSingleBox(id: number) {
     return new Promise(
       (resolve, reject) => {
-        firebase.database().ref('/boxs/' + id).once('value').then(
+        firebase.database().ref('/boxs/' + this.userId + '/' + id).once('value').then(
           (data: Datasnapshot) => {
             resolve(data.val());
           }, (error) => {

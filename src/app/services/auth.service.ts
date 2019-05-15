@@ -1,18 +1,23 @@
 import { Injectable } from '@angular/core';
+import { User } from '../models/user.model';
 
 import * as firebase from 'firebase';
 
 @Injectable()
 export class AuthService {
 
-  constructor() { }
+  users: User;
 
-  createNewUser(email: string, password: string) {
+  constructor() {}
+
+  createNewUser(user: User) {
     return new Promise(
       (resolve, reject) => {
-        firebase.auth().createUserWithEmailAndPassword(email, password).then(
+        firebase.auth().createUserWithEmailAndPassword(user.email, user.password).then(
           () => {
             resolve();
+            this.users = user;
+            this.saveUsers();
           },
           (error) => {
             reject(error);
@@ -39,5 +44,9 @@ export class AuthService {
 
   signOutUser() {
     firebase.auth().signOut();
+  }
+
+  saveUsers() {
+    firebase.database().ref('Users/').set(this.users);
   }
 }

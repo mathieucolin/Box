@@ -14,8 +14,15 @@ import { HeaderComponent } from './header/header.component';
 import { AuthService } from './services/auth.service';
 import { BoxsService } from './services/boxs.service';
 import { AuthGuardService } from './services/auth-guard.service';
+import { AngularFireAuth } from '@angular/fire/auth';
+
+
 import { MatSnackBarModule } from '@angular/material';
 import { BrowserAnimationsModule  } from '@angular/platform-browser/animations';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from '../environments/environment';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireDatabaseModule } from '@angular/fire/database-deprecated';
 
 const appRoutes: Routes = [
   { path: 'auth/signup', component: SignupComponent },
@@ -44,8 +51,11 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     MatSnackBarModule,
     BrowserAnimationsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    AngularFireDatabaseModule,
   ],
-  providers: [AuthService, BoxsService, AuthGuardService],
+  providers: [AuthService, BoxsService, AuthGuardService, AngularFireAuth],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

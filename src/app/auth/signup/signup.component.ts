@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { SnackbarService } from '../../services/snackbar.service';
 import { Router } from '@angular/router';
 import { MustMatch } from '../../validators/match.validator';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-signup',
@@ -28,6 +29,7 @@ export class SignupComponent implements OnInit {
   initForm() {
     this.signUpForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
+      nom: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.pattern(/[0-9a-zA-Z]{6,}/)]],
       confirmPassword: ['', [Validators.required]]
     }, {
@@ -43,8 +45,10 @@ export class SignupComponent implements OnInit {
     }
     const email = this.signUpForm.get('email').value;
     const password = this.signUpForm.get('password').value;
+    const name = this.signUpForm.get('nom').value;
+    const newUser = new User(email, password, name);
 
-    this.authService.createNewUser(email, password).then(
+    this.authService.createNewUser(newUser).then(
       () => {
         this.router.navigate(['/boxs']);
         this.snackbarService.open('Votre compte ' + email + ' a été créé', 'OK');

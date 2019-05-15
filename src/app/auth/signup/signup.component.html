@@ -3,6 +3,13 @@
     <h2>Créer un compte</h2>
     <form [formGroup] = "signUpForm" (ngSubmit) = "onSubmit()">
       <div class="form-group">
+        <label for ="nom">Nom</label>
+        <input type="text" id="nom" class="form-control" formControlName="nom" [ngClass]="{ 'is-invalid': submitted && f.nom.errors }">
+        <div *ngIf="submitted && f.nom.errors" class="invalid-feedback">
+          <div class="text text-danger" *ngIf="f.nom.errors.required">Ce champs est requis</div>
+        </div>
+      </div>
+      <div class="form-group">
         <label for = "email">Adresse mail</label>
         <input type="text" id ="email" class="form-control" formControlName="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
         <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
