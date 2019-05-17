@@ -24,6 +24,7 @@ import { environment } from '../environments/environment';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database-deprecated';
 import { AdminComponent } from './admin/admin.component';
+import { AdminGuardService } from './services/admin-guard.service';
 
 const appRoutes: Routes = [
   { path: 'auth/signup', component: SignupComponent },
@@ -31,7 +32,7 @@ const appRoutes: Routes = [
   { path: 'boxs', canActivate: [AuthGuardService], component: BoxListComponent },
   { path: 'boxs/new', canActivate: [AuthGuardService], component: BoxFormComponent },
   { path: 'boxs/view/:id', canActivate: [AuthGuardService], component: SingleBoxComponent},
-  { path: 'admin', component: AdminComponent },
+  { path: 'admin', canActivate: [AdminGuardService, AuthGuardService], component: AdminComponent },
   { path: '', redirectTo: 'boxs', pathMatch: 'full'},
   { path: '**', redirectTo: 'boxs' }
 ];
@@ -58,7 +59,7 @@ const appRoutes: Routes = [
     AngularFireAuthModule,
     AngularFireDatabaseModule,
   ],
-  providers: [AuthService, BoxsService, AuthGuardService, AngularFireAuth],
+  providers: [AuthService, BoxsService, AuthGuardService, AdminGuardService, AngularFireAuth],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
