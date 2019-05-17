@@ -13,14 +13,17 @@ export class BoxsService {
   boxsSubject = new Subject<any[]>();
 
   userId: string;
+  emailfromAuth: string;
 
   constructor(private afAuth: AngularFireAuth) {
     this.afAuth.authState.subscribe(user => {
       if (user) {
         this.userId = user.uid;
+        this.emailfromAuth = user.email;
         this.getBoxs();
 
         console.log('Id de l utilisateur : ' + this.userId);
+        console.log('email de l utilisateur : ' + this.emailfromAuth);
       }
      });
   }

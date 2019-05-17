@@ -24,6 +24,10 @@ export class HeaderComponent implements OnInit {
     );
   }
 
+  onDisplay(): boolean {
+    return this.authService.isAdmin();
+  }
+
   onSignOut() {
     this.authService.signOutUser();
   }

@@ -2,18 +2,21 @@ import { Injectable } from '@angular/core';
 import * as firebase from 'firebase';
 import { User } from '../models/user.model';
 import { Subject } from 'rxjs';
-
-
+import { AngularFireAuth } from '@angular/fire/auth';
 import Datasnapshot = firebase.database.DataSnapshot;
-import { BoxsService } from './boxs.service';
 
 @Injectable()
 export class AuthService {
 
   users: User[] = [];
   usersSubject = new Subject<any[]>();
-
-  constructor() {
+  emailfromAuth: string;
+  constructor(private afAuth: AngularFireAuth) {
+    this.afAuth.authState.subscribe(user => {
+      if (user) {
+        this.emailfromAuth = user.email;
+      }
+     });
     this.getUsers();
   }
 
@@ -70,14 +73,15 @@ export class AuthService {
    );
   }
 
-  isAdmin(email: string): boolean {
+  isAdmin(): boolean {
     for (const searchUser of this.users) {
-      if (email === searchUser.email) {
+      if (this.emailfromAuth === searchUser.email) {
         if (searchUser.user === false) {
           return true;
+        } else {
+          return false;
         }
       }
     }
-    return false;
   }
 }
