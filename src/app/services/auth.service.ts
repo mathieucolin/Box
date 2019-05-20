@@ -4,19 +4,17 @@ import { User } from '../models/user.model';
 import { Subject } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 import Datasnapshot = firebase.database.DataSnapshot;
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthService {
 
   users: User[] = [];
+  currentUser: User = null;
   usersSubject = new Subject<any[]>();
   emailfromAuth: string;
+
   constructor(private afAuth: AngularFireAuth) {
-    this.afAuth.authState.subscribe(user => {
-      if (user) {
-        this.emailfromAuth = user.email;
-      }
-     });
     this.getUsers();
   }
 
@@ -68,20 +66,43 @@ export class AuthService {
   getUsers() {
       firebase.database().ref('Users/').on('value', (data: Datasnapshot) => {
       this.users = data.val() ? data.val() : [];
+      this.getUserFromFirebase();
       this.emitUsers();
     }
    );
   }
 
   isAdmin(): boolean {
+    if (this.currentUser != null) {
+      if (this.currentUser.user === false) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  getUserFromEmail(emailFromAuth: string): User {
     for (const searchUser of this.users) {
-      if (this.emailfromAuth === searchUser.email) {
-        if (searchUser.user === false) {
-          return true;
-        } else {
-          return false;
-        }
+      if (emailFromAuth === searchUser.email) {
+        return searchUser;
       }
     }
+  }
+
+  getUserFromFirebase(): Observable<boolean> | Promise<boolean> | boolean {
+    return new Promise(
+      (resolve) => {
+          this.afAuth.authState.subscribe(user => {
+              if (user) {
+                  this.emailfromAuth = user.email;
+                  this.currentUser = this.getUserFromEmail(this.emailfromAuth);
+                  return(resolve);
+              }
+          });
+        }
+      );
   }
 }

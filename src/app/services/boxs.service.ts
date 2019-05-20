@@ -5,7 +5,7 @@ import * as firebase from 'firebase';
 import { AngularFireAuth } from '@angular/fire/auth';
 
 import Datasnapshot = firebase.database.DataSnapshot;
-
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class BoxsService {
@@ -15,7 +15,7 @@ export class BoxsService {
   userId: string;
   emailfromAuth: string;
 
-  constructor(private afAuth: AngularFireAuth) {
+  constructor(private afAuth: AngularFireAuth, private authService: AuthService) {
     this.afAuth.authState.subscribe(user => {
       if (user) {
         this.userId = user.uid;
@@ -39,6 +39,7 @@ export class BoxsService {
   getBoxs() {
     firebase.database().ref('/boxs/' + this.userId).on('value', (data: Datasnapshot) => {
       this.boxs = data.val() ? data.val() : [];
+      this.authService.currentUser.boxs = data.val() ? data.val() : [];
       this.emitBoxs();
     }
    );
@@ -60,6 +61,7 @@ export class BoxsService {
 
   createNewBox(newBox: Box) {
     this.boxs.push(newBox);
+    this.authService.currentUser.boxs.push(newBox);
     this.saveBoxs();
     this.emitBoxs();
   }
@@ -88,4 +90,5 @@ export class BoxsService {
     this.saveBoxs();
     this.emitBoxs();
   }
+
 }
