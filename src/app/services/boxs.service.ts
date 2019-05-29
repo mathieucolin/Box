@@ -3,15 +3,16 @@ import { Box } from '../models/box.model';
 import { Subject } from 'rxjs';
 import * as firebase from 'firebase';
 import { AngularFireAuth } from '@angular/fire/auth';
-
+import { User } from '../models/user.model';
 import Datasnapshot = firebase.database.DataSnapshot;
 import { AuthService } from './auth.service';
 
 @Injectable()
 export class BoxsService {
   boxs: Box[] = [];
+  boxsAdmin: Box[] = [];
   boxsSubject = new Subject<any[]>();
-
+  boxsAdminSubject = new Subject<any[]>();
   userId: string;
   emailfromAuth: string;
 
@@ -32,17 +33,37 @@ export class BoxsService {
     this.boxsSubject.next(this.boxs);
   }
 
+  emitBoxsAdmin() {
+    this.boxsAdminSubject.next(this.boxsAdmin);
+  }
+
   saveBoxs() {
-    firebase.database().ref('/boxs/' + this.userId).set(this.boxs);
+    console.log('this.authService.currentUser.box dans saveBox = ' + this.authService.currentUser.boxs);
+    console.log('this.userID dans saveBox = ' + this.userId);
+    firebase.database().ref('/Users/').set(this.authService.users);
+    firebase.database().ref('/boxs/' + this.userId).set(this.authService.currentUser.boxs);
+    console.log('dans savebox, this.boxs ' + this.authService.currentUser.boxs);
+    firebase.database().ref('/boxsAdmin/').set(this.authService.adminUser.boxs);
+    console.log('dans savebox, this.boxsAdmin' + this.authService.adminUser.boxs);
   }
 
   getBoxs() {
     firebase.database().ref('/boxs/' + this.userId).on('value', (data: Datasnapshot) => {
-      this.boxs = data.val() ? data.val() : [];
+      // this.boxs = data.val() ? data.val() : [];
       this.authService.currentUser.boxs = data.val() ? data.val() : [];
+      this.boxs = this.authService.currentUser.boxs;
+
       this.emitBoxs();
     }
    );
+    firebase.database().ref('/boxsAdmin/').on('value', (data: Datasnapshot) => {
+      // this.boxs = data.val() ? data.val() : [];
+      this.authService.adminUser.boxs = data.val() ? data.val() : [];
+      this.boxsAdmin = this.authService.adminUser.boxs;
+
+      this.emitBoxsAdmin();
+      }
+    );
   }
 
   getSingleBox(id: number) {
@@ -60,10 +81,13 @@ export class BoxsService {
   }
 
   createNewBox(newBox: Box) {
-    this.boxs.push(newBox);
+    // this.boxs.push(newBox);
     this.authService.currentUser.boxs.push(newBox);
+    this.authService.adminUser.boxs.push(newBox);
+    console.log('this.authService.currentUser.box dans createBox = ' + this.authService.currentUser.boxs);
     this.saveBoxs();
     this.emitBoxs();
+    this.emitBoxsAdmin();
   }
 
   removeBox(box: Box) {

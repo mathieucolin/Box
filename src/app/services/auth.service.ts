@@ -11,6 +11,7 @@ export class AuthService {
 
   users: User[] = [];
   currentUser: User = null;
+  adminUser: User = null;
   usersSubject = new Subject<any[]>();
   emailfromAuth: string;
 
@@ -66,6 +67,11 @@ export class AuthService {
   getUsers() {
       firebase.database().ref('Users/').on('value', (data: Datasnapshot) => {
       this.users = data.val() ? data.val() : [];
+      for (const user of this.users) {
+        if (user.boxs === undefined) {
+          user.boxs = [];
+        }
+      }
       this.getUserFromFirebase();
       this.emitUsers();
     }
@@ -99,6 +105,7 @@ export class AuthService {
               if (user) {
                   this.emailfromAuth = user.email;
                   this.currentUser = this.getUserFromEmail(this.emailfromAuth);
+                  this.adminUser = this.getUserFromEmail('admin@gmail.com');
                   return(resolve);
               }
           });

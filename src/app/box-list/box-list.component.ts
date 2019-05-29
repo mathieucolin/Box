@@ -4,6 +4,7 @@ import { Box } from '../models/box.model';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { SnackbarService } from '../services/snackbar.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-box-list',
@@ -13,17 +14,35 @@ import { SnackbarService } from '../services/snackbar.service';
 export class BoxListComponent implements OnInit, OnDestroy {
 
   boxs: Box[];
+  boxsAdmin: Box[];
   boxSubscription: Subscription;
+  boxAdminSubscription: Subscription;
+  mybool: boolean;
 
-  constructor(private boxsService: BoxsService, private router: Router, private snackbarService: SnackbarService) { }
+  constructor(private authService: AuthService, private boxsService: BoxsService, private router: Router,
+              private snackbarService: SnackbarService) { }
 
   ngOnInit() {
-    this.boxSubscription = this.boxsService.boxsSubject.subscribe(
-      (boxs: Box[]) => {
-        this.boxs = boxs;
-      }
-    );
-    this.boxsService.emitBoxs();
+      this.boxAdminSubscription = this.boxsService.boxsAdminSubject.subscribe(
+        (boxsAdmin: Box[]) => {
+          this.boxsAdmin = boxsAdmin;
+          console.log('boxsAdmin boxSubscription dans Boxlist = ' + this.boxsAdmin);
+        }
+      );
+      this.boxsService.emitBoxsAdmin();
+
+      this.boxSubscription = this.boxsService.boxsSubject.subscribe(
+        (boxs: Box[]) => {
+          this.boxs = boxs;
+          console.log('boxs boxSubscription dans Boxlist = ' + this.boxs);
+        }
+      );
+      this.boxsService.emitBoxs();
+  }
+
+  onAdmin(): boolean {
+    this.mybool = this.authService.isAdmin();
+    return this.authService.isAdmin();
   }
 
   onNewBox() {

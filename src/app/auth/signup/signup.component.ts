@@ -5,7 +5,7 @@ import { SnackbarService } from '../../services/snackbar.service';
 import { Router } from '@angular/router';
 import { MustMatch } from '../../validators/match.validator';
 import { User } from '../../models/user.model';
-
+import { Box } from '../../models/box.model';
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -46,10 +46,13 @@ export class SignupComponent implements OnInit {
     const email = this.signUpForm.get('email').value;
     const password = this.signUpForm.get('password').value;
     const name = this.signUpForm.get('nom').value;
-    const newUser = new User(email, password, name);
+    const boxs: Box[] = [];
+    const newUser = new User(email, password, name, boxs);
 
+    console.log('newUser.box = ' + newUser.boxs);
     this.authService.createNewUser(newUser).then(
       () => {
+        console.log('newUser : ' + newUser.boxs);
         this.router.navigate(['/boxs']);
         this.snackbarService.open('Votre compte ' + email + ' a été créé', 'OK');
       },
