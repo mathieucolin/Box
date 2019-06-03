@@ -49,6 +49,7 @@ export class BoxsService {
       this.authService.currentUser.boxs = data.val() ? data.val() : [];
       this.boxs = this.authService.currentUser.boxs;
 
+      console.log('coucou');
       this.emitBoxs();
     }
    );
