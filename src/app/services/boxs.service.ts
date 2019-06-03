@@ -48,8 +48,6 @@ export class BoxsService {
       // this.boxs = data.val() ? data.val() : [];
       this.authService.currentUser.boxs = data.val() ? data.val() : [];
       this.boxs = this.authService.currentUser.boxs;
-
-      console.log('coucou');
       this.emitBoxs();
     }
    );
@@ -64,17 +62,32 @@ export class BoxsService {
   }
 
   getSingleBox(id: number) {
-    return new Promise(
-      (resolve, reject) => {
-        firebase.database().ref('/boxs/' + this.userId + '/' + id).once('value').then(
-          (data: Datasnapshot) => {
-            resolve(data.val());
-          }, (error) => {
-            reject(error);
+
+    if (this.emailfromAuth === 'admin@gmail.com') {
+      return new Promise(
+        (resolve, reject) => {
+          firebase.database().ref('/boxsAdmin/' + id).once('value').then(
+            (data: Datasnapshot) => {
+              resolve(data.val());
+            }, (error) => {
+              reject(error);
+            }
+          );
+        }
+      );
+    } else {
+        return new Promise(
+          (resolve, reject) => {
+            firebase.database().ref('/boxs/' + this.userId + '/' + id).once('value').then(
+              (data: Datasnapshot) => {
+                resolve(data.val());
+              }, (error) => {
+                reject(error);
+              }
+            );
           }
         );
       }
-    );
   }
 
   createNewBox(newBox: Box) {
