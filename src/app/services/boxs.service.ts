@@ -38,13 +38,9 @@ export class BoxsService {
   }
 
   saveBoxs() {
-    console.log('this.authService.currentUser.box dans saveBox = ' + this.authService.currentUser.boxs);
-    console.log('this.userID dans saveBox = ' + this.userId);
     firebase.database().ref('/Users/').set(this.authService.users);
     firebase.database().ref('/boxs/' + this.userId).set(this.authService.currentUser.boxs);
-    console.log('dans savebox, this.boxs ' + this.authService.currentUser.boxs);
     firebase.database().ref('/boxsAdmin/').set(this.authService.adminUser.boxs);
-    console.log('dans savebox, this.boxsAdmin' + this.authService.adminUser.boxs);
   }
 
   getBoxs() {
@@ -84,7 +80,6 @@ export class BoxsService {
     // this.boxs.push(newBox);
     this.authService.currentUser.boxs.push(newBox);
     this.authService.adminUser.boxs.push(newBox);
-    console.log('this.authService.currentUser.box dans createBox = ' + this.authService.currentUser.boxs);
     this.saveBoxs();
     this.emitBoxs();
     this.emitBoxsAdmin();
