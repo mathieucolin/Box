@@ -18,6 +18,8 @@ export class BoxListComponent implements OnInit, OnDestroy {
   boxSubscription: Subscription;
   boxAdminSubscription: Subscription;
   mybool: boolean;
+  arrayBoxs = [];
+  arrayBoxsAdmin = [];
 
   constructor(private authService: AuthService, private boxsService: BoxsService, private router: Router,
               private snackbarService: SnackbarService) { }
@@ -27,6 +29,7 @@ export class BoxListComponent implements OnInit, OnDestroy {
         (boxsAdmin: Box[]) => {
           this.boxsAdmin = boxsAdmin;
           console.log('boxsAdmin boxSubscription dans Boxlist = ' + this.boxsAdmin);
+          this.arrayBoxsAdmin = Array.from(this.boxsAdmin);
         }
       );
       this.boxsService.emitBoxsAdmin();
@@ -35,6 +38,7 @@ export class BoxListComponent implements OnInit, OnDestroy {
         (boxs: Box[]) => {
           this.boxs = boxs;
           console.log('boxs boxSubscription dans Boxlist = ' + this.boxs);
+          this.arrayBoxs = Array.from(this.boxs);
         }
       );
       this.boxsService.emitBoxs();
